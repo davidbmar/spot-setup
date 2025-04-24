@@ -28,7 +28,7 @@ SPOT_REQ_ID=$(aws ec2 request-spot-instances \
       {
         "DeviceName": "/dev/sda1",
         "Ebs": {
-          "VolumeSize": 150,
+          "VolumeSize": 250,
           "VolumeType": "gp3",
           "DeleteOnTermination": true
         }
