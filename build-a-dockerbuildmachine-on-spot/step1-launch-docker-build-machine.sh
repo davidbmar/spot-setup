@@ -5,12 +5,12 @@ set -euo pipefail
 # Use a standard AMI like Amazon Linux 2023 (replace with the latest ID for your region)
 # Find AL2023 AMIs here: https://aws.amazon.com/amazon-linux-2023/ami/
 # Look for "ami-xxxxxxxxxxxxxxxxx (HVM, x86_64, GP2/GP3)"
-# Example for us-east-2 (Ohio) - VERIFY THE LATEST ID!
-AMI_ID="ami-060a84cbcb5c14844" # <<< REPLACE with actual AL2023 AMI ID for your region!
+# Example for us-east-2 (Ohio) - VERIFY THE LATEST ID using the aws cli command below!
+AMI_ID="ami-060a84cbcb5c14844" #amazon linux 2023
 INSTANCE_TYPE="t3.large" # Sufficient CPU/RAM for building
 SECURITY_GROUP_ID="sg-04f1a5465fe1b8f6e" # Your existing SG allowing SSH
 SUBNET_ID="subnet-07efda88a184dd62d"     # Your existing subnet
-SPOT_PRICE="0.10" # Adjust based on t3.large spot prices
+SPOT_PRICE="0.10" # Adjust based on t3.large spot prices (check current price below)
 KEY_NAME="g4dn.xlarge.david" # Your existing key pair name
 KEY_PATH="$HOME/Desktop/login/g4dn.xlarge.david.pem" # Path to your key file
 
@@ -62,7 +62,7 @@ LAUNCH_SPEC_JSON=$(printf '{
     {
       "DeviceName": "/dev/xvda",
       "Ebs": {
-        "VolumeSize": 100,
+        "VolumeSize": 150,      
         "VolumeType": "gp3",
         "DeleteOnTermination": true
       }
@@ -79,21 +79,22 @@ LAUNCH_SPEC_JSON=$(printf '{
 )
 
 # --- DEBUGGING ---
-echo "--- Raw User Data Script Content ---"
-echo "$USER_DATA_SCRIPT_CONTENT"
-echo "------------------------------------"
-echo "--- Base64 Encoded User Data ---"
-echo "$BASE64_USER_DATA"
-echo "--------------------------------"
-echo "--- Launch Specification JSON being sent ---"
-echo "$LAUNCH_SPEC_JSON"
-echo "------------------------------------------"
+# echo "--- Raw User Data Script Content ---"
+# echo "$USER_DATA_SCRIPT_CONTENT"
+# echo "------------------------------------"
+# echo "--- Base64 Encoded User Data ---"
+# echo "$BASE64_USER_DATA"
+# echo "--------------------------------"
+# echo "--- Launch Specification JSON being sent ---"
+# echo "$LAUNCH_SPEC_JSON"
+# echo "------------------------------------------"
 # --- END DEBUGGING ---
 
 
-echo "✨ Submitting Spot request for Docker Build Machine (CPU)..."
+echo "✨ Submitting Spot request for Docker Build Machine (CPU) with 150 GiB root..."
 
-# Launch Specification is now built as a separate variable
+# Launch Specification is built as a separate variable
+# Ensure no space after the backslashes '\' at the end of lines!
 SPOT_REQ_ID=$(aws ec2 request-spot-instances \
   --spot-price "$SPOT_PRICE" \
   --instance-count 1 \
