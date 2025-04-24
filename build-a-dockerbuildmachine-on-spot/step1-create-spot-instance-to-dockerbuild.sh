@@ -13,7 +13,7 @@ KEY_PATH="$HOME/Desktop/login/g4dn.xlarge.david.pem"
 
 chmod 400 "$KEY_PATH"
 
-echo "✨ Submitting Spot request with larger root volume (150 GiB)..."
+echo "✨ Submitting Spot request with larger root volume (250 GiB)..."
 # Note: Launch Specification below includes BlockDeviceMappings for 150GiB gp3 root volume
 SPOT_REQ_ID=$(aws ec2 request-spot-instances \
   --spot-price "$SPOT_PRICE" \
