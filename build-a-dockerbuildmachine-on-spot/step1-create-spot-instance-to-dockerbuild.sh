@@ -12,11 +12,12 @@ KEY_PATH="$HOME/Desktop/login/g4dn.xlarge.david.pem"
 
 chmod 400 "$KEY_PATH"
 
-echo "✨ Submitting Spot request with larger root volume (150 GiB)..." # Modified echo message
+echo "✨ Submitting Spot request with larger root volume (150 GiB)..."
 SPOT_REQ_ID=$(aws ec2 request-spot-instances \
   --spot-price "$SPOT_PRICE" \
   --instance-count 1 \
   --type "one-time" \
+  # Corrected launch specification - removed backslashes inside BlockDeviceMappings
   --launch-specification '{
     "ImageId":"'"$AMI_ID"'",
     "InstanceType":"'"$INSTANCE_TYPE"'",
@@ -24,11 +25,11 @@ SPOT_REQ_ID=$(aws ec2 request-spot-instances \
     "NetworkInterfaces":[{"DeviceIndex":0,"SubnetId":"'"$SUBNET_ID"'","AssociatePublicIpAddress":true,"Groups":["'"$SECURITY_GROUP_ID"'"]}],
     "BlockDeviceMappings": [
       {
-        \"DeviceName\": \"/dev/sda1\",
-        \"Ebs\": {
-          \"VolumeSize\": 150,
-          \"VolumeType\": \"gp3\",
-          \"DeleteOnTermination\": true
+        "DeviceName": "/dev/sda1",   # No backslashes needed here
+        "Ebs": {
+          "VolumeSize": 150,
+          "VolumeType": "gp3",
+          "DeleteOnTermination": true
         }
       }
     ]
