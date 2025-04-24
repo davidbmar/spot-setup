@@ -10,14 +10,15 @@ SPOT_PRICE="0.50"
 KEY_NAME="g4dn.xlarge.david"
 KEY_PATH="$HOME/Desktop/login/g4dn.xlarge.david.pem"
 
+
 chmod 400 "$KEY_PATH"
 
 echo "✨ Submitting Spot request with larger root volume (150 GiB)..."
+# Note: Launch Specification below includes BlockDeviceMappings for 150GiB gp3 root volume
 SPOT_REQ_ID=$(aws ec2 request-spot-instances \
   --spot-price "$SPOT_PRICE" \
   --instance-count 1 \
   --type "one-time" \
-  # Corrected launch specification - removed backslashes inside BlockDeviceMappings
   --launch-specification '{
     "ImageId":"'"$AMI_ID"'",
     "InstanceType":"'"$INSTANCE_TYPE"'",
@@ -25,7 +26,7 @@ SPOT_REQ_ID=$(aws ec2 request-spot-instances \
     "NetworkInterfaces":[{"DeviceIndex":0,"SubnetId":"'"$SUBNET_ID"'","AssociatePublicIpAddress":true,"Groups":["'"$SECURITY_GROUP_ID"'"]}],
     "BlockDeviceMappings": [
       {
-        "DeviceName": "/dev/sda1",   # No backslashes needed here
+        "DeviceName": "/dev/sda1",
         "Ebs": {
           "VolumeSize": 150,
           "VolumeType": "gp3",
@@ -35,9 +36,10 @@ SPOT_REQ_ID=$(aws ec2 request-spot-instances \
     ]
   }' \
   --query 'SpotInstanceRequests[0].SpotInstanceRequestId' \
-  --output text)
+  --output text) # This might be around line 54 in your script
 
 echo "⏳ Waiting for fulfillment..."
+
 aws ec2 wait spot-instance-request-fulfilled --spot-instance-request-ids "$SPOT_REQ_ID"
 
 INSTANCE_ID=$(aws ec2 describe-spot-instance-requests \
