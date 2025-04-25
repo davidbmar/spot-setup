@@ -24,11 +24,11 @@ SPOT_REQ_ID=$(aws ec2 request-spot-instances \
     "NetworkInterfaces":[{"DeviceIndex":0,"SubnetId":"'"$SUBNET_ID"'","AssociatePublicIpAddress":true,"Groups":["'"$SECURITY_GROUP_ID"'"]}],
     "BlockDeviceMappings": [
       {
-        \"DeviceName\": \"/dev/sda1\",
-        \"Ebs\": {
-          \"VolumeSize\": 150,
-          \"VolumeType\": \"gp3\",
-          \"DeleteOnTermination\": true
+        "DeviceName": "/dev/sda1",
+        "Ebs": {
+          "VolumeSize": 150,
+          "VolumeType": "gp3",
+          "DeleteOnTermination": true
         }
       }
     ]
