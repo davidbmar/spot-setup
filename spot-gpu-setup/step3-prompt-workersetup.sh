@@ -21,8 +21,9 @@ if ! grep -q "$PROMPT_MARKER" "$BASHRC"; then
     cat >> "$BASHRC" <<'EOF'
 
 # >>> dockerbuilder prompt >>>
-# Dark blue (0;34) [dockerbuilder][dir] prompt
-PS1='\[\e[0;34m\][dockerbuilder][\W]\[\e[0m\]\$ '
+# \033]00m\] white
+PS1='\[\e[1;36m\][worker][\W]\[\e[0m\]\$ '
+
 # <<< dockerbuilder prompt <<<
 EOF
     echo "🔹 Added dark-blue dockerbuilder prompt"
