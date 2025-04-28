@@ -30,12 +30,21 @@ if docker ps -a --format '{{.Names}}' | grep -qw "$CONTAINER_NAME"; then
   docker rm -f "$CONTAINER_NAME"
 fi
 
+# Check if all required environment variables are set
+if [ -z "${AWS_ACCESS_KEY_ID}" ] || [ -z "${AWS_SECRET_ACCESS_KEY}" ] || [ -z "${AWS_DEFAULT_REGION}" ]; then
+  echo "Error: One or more required AWS environment variables are not set"
+  echo "Please ensure AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_DEFAULT_REGION are set"
+  exit 1
+fi
+
 echo "🔹 Starting $CONTAINER_NAME in detached mode..."
 docker run -d \
   --name "$CONTAINER_NAME" \
   -p "${HOST_PORT}:${CONTAINER_PORT}" \
   -v "${DATA_DIR}":/app/data \
-  -e AWS_PROFILE=dev \
+  -e AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \
+  -e AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
+  -e AWS_DEFAULT_REGION="us-east-2" \
   --gpus all \
   "$IMAGE"
 
