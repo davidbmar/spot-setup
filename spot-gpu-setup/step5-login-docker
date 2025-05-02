@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "login to docker and put in your PAT"
