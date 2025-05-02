@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # — Configuration —
-# Ubuntu 20.04 LTS AMI for us-east-2
-AMI_ID="ami-0c8cb6d6f6dc127c9"
+# Ubuntu 22.04 LTS AMI with NVIDIA drivers pre-installed
+AMI_ID="ami-0c8cb6d6f6dc127c9"  # Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 22.04) in us-east-2
 INSTANCE_TYPE="g4dn.xlarge"
 SECURITY_GROUP_ID="sg-04f1a5465fe1b8f6e"
 SUBNET_ID="subnet-07efda88a184dd62d"
@@ -11,8 +11,8 @@ KEY_NAME="g4dn.xlarge.david"
 KEY_PATH="$HOME/Desktop/login/g4dn.xlarge.david.pem"
 REGION="us-east-2"
 chmod 400 "$KEY_PATH"
-echo "✨ Using Ubuntu 20.04 LTS AMI ID in us-east-2: $AMI_ID"
-echo "✨ Submitting Spot request with larger root volume (150 GiB)..." # Modified echo message
+echo "✨ Using Ubuntu 22.04 LTS AMI with NVIDIA drivers in us-east-2: $AMI_ID"
+echo "✨ Submitting Spot request with larger root volume (150 GiB)..."
 SPOT_REQ_ID=$(aws ec2 request-spot-instances \
   --spot-price "$SPOT_PRICE" \
   --instance-count 1 \
@@ -33,7 +33,7 @@ SPOT_REQ_ID=$(aws ec2 request-spot-instances \
         }
       }
     ],
-    "UserData": "IyEvYmluL2Jhc2gKIyBVcGRhdGUgc3lzdGVtIHBhY2thZ2VzCnNldCAtZXVvIHBpcGVmYWlsCmFwdCB1cGRhdGUKYXB0IGluc3RhbGwgLXkgY3VybCBidWlsZC1lc3NlbnRpYWwgZGttcwoKIyBJbnN0YWxsIE5WSURJQSBkcml2ZXJzCmFwdCBpbnN0YWxsIC15IG52aWRpYS1kcml2ZXItNTcwCgojIEluc3RhbGwgQ1VEQSBUb29sa2l0IDEyLjcKd2dldCBodHRwczovL2RldmVsb3Blci5kb3dubG9hZC5udmlkaWEuY29tL2NvbXB1dGUvY3VkYS9yZXBvcy91YnVudHUyMDA0L3g4Nl82NC9jdWRhLWtleXJpbmdfMS4xLTFfYWxsLmRlYgpkcGtnIC1pIGN1ZGEta2V5cmluZ18xLjEtMV9hbGwuZGViCmFwdC1nZXQgdXBkYXRlCmFwdC1nZXQgaW5zdGFsbCAteSBjdWRhLXRvb2xraXQtMTItNwoKIyBJbnN0YWxsIERvY2tlcgphcHQgaW5zdGFsbCAteSBkb2NrZXIuaW8Kc3lzdGVtY3RsIGVuYWJsZSAtLW5vdyBkb2NrZXIKdXNlcm1vZCAtYUcgZG9ja2VyIHVidW50dQoKIyBJbnN0YWxsIE5WSURJQSBDb250YWluZXIgVG9vbGtpdApkaXN0cmlidXRpb249JCguIC9ldGMvb3MtcmVsZWFzZTtlY2hvICRJRCRWRVJTSU9OX0lEKQpjdXJsIC1zIC1MIGh0dHBzOi8vbnZpZGlhLmdpdGh1Yi5pby9udmlkaWEtZG9ja2VyL2dwZ2tleSB8IGFwdC1rZXkgYWRkIC0KY3VybCAtcyAtTCBodHRwczovL252aWRpYS5naXRodWIuaW8vbnZpZGlhLWRvY2tlci8kZGlzdHJpYnV0aW9uL252aWRpYS1kb2NrZXIubGlzdCB8IHRlZSAvZXRjL2FwdC9zb3VyY2VzLmxpc3QuZC9udmlkaWEtZG9ja2VyLmxpc3QKYXB0LWdldCB1cGRhdGUKYXB0LWdldCBpbnN0YWxsIC15IG52aWRpYS1jb250YWluZXItdG9vbGtpdApudmlkaWEtY3RrIHJ1bnRpbWUgY29uZmlndXJlIC0tcnVudGltZT1kb2NrZXIKc3lzdGVtY3RsIHJlc3RhcnQgZG9ja2VyCgojIFNldCBlbnZpcm9ubWVudCB2YXJpYWJsZXMKY2F0ID4+IC9ob21lL3VidW50dS8uYmFzaHJjIDw8RU9GCgojIENVREEgc2V0dXAKZXhwb3J0IFBBVEg9IiRQQVRIOi91c3IvbG9jYWwvY3VkYS1ub3ZhL2JpbiIKZXhwb3J0IExEX0xJQlJBUllfUEFUSD0iJExEX0xJQlJBUllfUEFUSDovdXNyL2xvY2FsL2N1ZGEtbm92YS9saWI2NCIKRU9GCgojIEVuc3VyZSB1YnVudHUgdXNlciBvd25zIHRoZSBmaWxlcwpjaG93biAtUiB1YnVudHU6dWJ1bnR1IC9ob21lL3VidW50dS8uYmFzaHJjCgojIENyZWF0ZSBhIHRlc3QgZmlsZSB0byBpbmRpY2F0ZSBjb21wbGV0aW9uCmNhdCA+IC9ob21lL3VidW50dS9pbnN0YWxsYXRpb25fY29tcGxldGUudHh0IDw8RU9GCkluc3RhbGxhdGlvbiBjb21wbGV0ZWQgYXQgJChkYXRlKQpSZWJvb3QgdGhlIHN5c3RlbSB0byBlbnN1cmUgYWxsIGRyaXZlcnMgYXJlIGxvYWRlZCBwcm9wZXJseS4KRU9GCmNob3duIHVidW50dTp1YnVudHUgL2hvbWUvdWJ1bnR1L2luc3RhbGxhdGlvbl9jb21wbGV0ZS50eHQKCiMgUmVib290IHRvIGFwcGx5IGFsbCBjaGFuZ2VzCnJlYm9vdA=="
+    "UserData": "IyEvYmluL2Jhc2gKc2V0IC1ldW8gcGlwZWZhaWwKCiMgVXBkYXRlIHN5c3RlbQphcHQgdXBkYXRlCgojIEluc3RhbGwgRG9ja2VyIGlmIG5vdCBhbHJlYWR5IGluc3RhbGxlZAp3aGljaCBkb2NrZXIgfHwgKAogIGFwdCBpbnN0YWxsIC15IGRvY2tlci5pbwogIHN5c3RlbWN0bCBlbmFibGUgLS1ub3cgZG9ja2VyCiAgdXNlcm1vZCAtYUcgZG9ja2VyIHVidW50dQopCgojIEluc3RhbGwgTlZJRElBIENvbnRhaW5lciBUb29sa2l0IGlmIG5vdCBhbHJlYWR5IGluc3RhbGxlZApkaXN0cmlidXRpb249JCguIC9ldGMvb3MtcmVsZWFzZTtlY2hvICRJRCRWRVJTSU9OX0lEKQppZiAhIGNvbW1hbmQgLXYgbnZpZGlhLWN0ayA+L2Rldi9udWxsIDI+JjE7IHRoZW4KICBjdXJsIC1zIC1MIGh0dHBzOi8vbnZpZGlhLmdpdGh1Yi5pby9udmlkaWEtZG9ja2VyL2dwZ2tleSB8IGFwdC1rZXkgYWRkIC0KICBjdXJsIC1zIC1MIGh0dHBzOi8vbnZpZGlhLmdpdGh1Yi5pby9udmlkaWEtZG9ja2VyLyRkaXN0cmlidXRpb24vbnZpZGlhLWRvY2tlci5saXN0IHwgdGVlIC9ldGMvYXB0L3NvdXJjZXMubGlzdC5kL252aWRpYS1kb2NrZXIubGlzdAogIGFwdC1nZXQgdXBkYXRlCiAgYXB0LWdldCBpbnN0YWxsIC15IG52aWRpYS1jb250YWluZXItdG9vbGtpdAogIG52aWRpYS1jdGsgcnVudGltZSBjb25maWd1cmUgLS1ydW50aW1lPWRvY2tlcgogIHN5c3RlbWN0bCByZXN0YXJ0IGRvY2tlcgpmaQoKIyBQdWxsIHRoZSBXaGlzcGVyWCBkb2NrZXIgaW1hZ2UKZWNobyAiUHVsbGluZyBXaGlzcGVyWCBkb2NrZXIgaW1hZ2UuLi4iCmRvY2tlciBwdWxsIGdoY3IuaW8vamltNjAxMDUvd2hpc3Blcng6bm9fbW9kZWwKCiMgVmVyaWZ5IHRoYXQgR1BVIGlzIGF2YWlsYWJsZSB0byBEb2NrZXIKZWNobyAiVmVyaWZ5aW5nIEdQVSBhY2Nlc3MgaW4gRG9ja2VyLi4uIgpkb2NrZXIgcnVuIC0tZ3B1cyBhbGwgLS1ybSBudmlkaWEvY3VkYToxMi4yLjAtYmFzZS11YnVudHUyMi4wNCBudmlkaWEtc21pCgojIENyZWF0ZSBhIHRlc3QgZmlsZSB0byBpbmRpY2F0ZSBjb21wbGV0aW9uCmNhdCA+IC9ob21lL3VidW50dS9pbnN0YWxsYXRpb25fY29tcGxldGUudHh0IDw8RU9GCkluc3RhbGxhdGlvbiBjb21wbGV0ZWQgYXQgJChkYXRlKQpUaGUgc3lzdGVtIGlzIHJlYWR5IHRvIHJ1biBXaGlzcGVyWAoKIyBWZXJpZnkgdXNpbmc6CiMgbnZpZGlhLXNtaQojIGRvY2tlciBydW4gLS1ncHVzIGFsbCAtLXJtIG52aWRpYS9jdWRhOjEyLjIuMC1iYXNlLXVidW50dTIyLjA0IG52aWRpYS1zbWkKIwojIFJ1biBXaGlzcGVyWCB3aXRoOgojIGRvY2tlciBydW4gLS1ncHVzIGFsbCAtaXQgLXYgIiQocHdkKTovYXBwIiAtdiAiJChwd2QpLy5jYWNoZTovcm9vdC8uY2FjaGUiIGdoY3IuaW8vamltNjAxMDUvd2hpc3Blcng6bm9fbW9kZWwgLS0gLS1tb2RlbCB0aW55IC0tbGFuZ3VhZ2UgZW4gLS1vdXRwdXRfZm9ybWF0IHNydCAtLWNvbXB1dGVfdHlwZSBpbnQ4IC0tdmFkX2ZpbHRlciBGYWxzZSBhdWRpby5tcDMKRU9GCmNob3duIHVidW50dTp1YnVudHUgL2hvbWUvdWJ1bnR1L2luc3RhbGxhdGlvbl9jb21wbGV0ZS50eHQKCmVjaG8gIlNldHVwIGNvbXBsZXRlIgo="
   }' \
   --query 'SpotInstanceRequests[0].SpotInstanceRequestId' \
   --output text)
@@ -72,11 +72,11 @@ echo
 echo "🔑 Connect with:"
 echo "   ssh -i \"$KEY_PATH\" ubuntu@$PUBLIC_IP"
 echo
-echo "⚠️ Wait about 5-10 minutes for the setup script to complete installation of NVIDIA drivers and CUDA 12.7"
+echo "⚠️ Wait a few minutes for Docker and NVIDIA setup to complete"
 echo
 echo "After connecting, verify the installation with:"
 echo "   nvidia-smi"
-echo "   nvcc --version"
+echo "   docker run --gpus all --rm nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi"
 echo
 echo "Then run WhisperX with:"
 echo "   docker run --gpus all -it -v \"\$(pwd):/app\" -v \"\$(pwd)/.cache:/root/.cache\" ghcr.io/jim60105/whisperx:no_model -- --model tiny --language en --output_format srt --compute_type int8 --vad_filter False audio.mp3"
