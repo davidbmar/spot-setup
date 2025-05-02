@@ -1,0 +1,26 @@
+# For Ubuntu/Debian
+#sudo apt-get update
+#sudo apt-get install docker-ce docker-ce-cli containerd.io
+#
+# Install Docker on Amazon Linux 2.
+sudo yum update -y
+sudo yum install -y docker
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+# Then log out and log back in, or run:
+newgrp docker
+
+# Install the NVIDIA driver if not already installed:
+sudo yum install -y gcc kernel-devel-$(uname -r)
+# Check if you have a GPU
+lspci | grep -i nvidia
+
+# Install the NVIDIA Container Toolkit:
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
+sudo yum install -y nvidia-container-toolkit
+sudo systemctl restart docker
+
+#Test the GPU with Docker:
+docker run --gpus all nvidia/cuda:11.0-base nvidia-smi
