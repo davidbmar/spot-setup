@@ -2,7 +2,7 @@
 set -euo pipefail
 # — Configuration —
 # Ubuntu 20.04 LTS AMI for us-east-2
-AMI_ID="ami-051197a6466e8a8ac"  # Ubuntu 20.04 LTS in us-east-2
+AMI_ID="ami-0c8cb6d6f6dc127c9"
 INSTANCE_TYPE="g4dn.xlarge"
 SECURITY_GROUP_ID="sg-04f1a5465fe1b8f6e"
 SUBNET_ID="subnet-07efda88a184dd62d"
