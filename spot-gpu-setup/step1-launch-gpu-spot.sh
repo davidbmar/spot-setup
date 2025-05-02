@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # — Configuration —
-# Hardcoded Amazon Linux 2023 AMI for us-east-2
-AMI_ID="ami-0430580de6244e02e"  # Amazon Linux 2023 in us-east-2
+# Ubuntu 20.04 LTS AMI for us-east-2
+AMI_ID="ami-051197a6466e8a8ac"  # Ubuntu 20.04 LTS in us-east-2
 INSTANCE_TYPE="g4dn.xlarge"
 SECURITY_GROUP_ID="sg-04f1a5465fe1b8f6e"
 SUBNET_ID="subnet-07efda88a184dd62d"
@@ -11,7 +11,7 @@ KEY_NAME="g4dn.xlarge.david"
 KEY_PATH="$HOME/Desktop/login/g4dn.xlarge.david.pem"
 REGION="us-east-2"
 chmod 400 "$KEY_PATH"
-echo "✨ Using Amazon Linux 2023 AMI ID in us-east-2: $AMI_ID"
+echo "✨ Using Ubuntu 20.04 LTS AMI ID in us-east-2: $AMI_ID"
 echo "✨ Submitting Spot request with larger root volume (150 GiB)..." # Modified echo message
 SPOT_REQ_ID=$(aws ec2 request-spot-instances \
   --spot-price "$SPOT_PRICE" \
@@ -33,7 +33,7 @@ SPOT_REQ_ID=$(aws ec2 request-spot-instances \
         }
       }
     ],
-    "UserData": "IyEvYmluL2Jhc2gKIyBVcGRhdGUgc3lzdGVtIHBhY2thZ2VzCnN1ZG8gZG5mIHVwZGF0ZSAteSAmJiBzdWRvIGRuZiBpbnN0YWxsIC15IGRrbXMKc3VkbyBzeXN0ZW1jdGwgZW5hYmxlIC0tbm93IGRrbXMKIyBJbnN0YWxsIGtlcm5lbCBkZXZlbG9wbWVudCBwYWNrYWdlcwppZiAodW5hbWUgLXIgfCBncmVwIC1xIF42LjEyLik7IHRoZW4KICBzdWRvIGRuZiBpbnN0YWxsIC15IGtlcm5lbC1kZXZlbC0kKHVuYW1lIC1yKSBrZXJuZWw2LjEyLW1vZHVsZXMtZXh0cmEKZWxzZQogIHN1ZG8gZG5mIGluc3RhbGwgLXkga2VybmVsLWRldmVsLSQodW5hbWUgLXIpIGtlcm5lbC1tb2R1bGVzLWV4dHJhCmZpCnN1ZG8gZG5mIGluc3RhbGwgLXkgZG9ja2VyCnN1ZG8gc3lzdGVtY3RsIGVuYWJsZSAtLW5vdyBkb2NrZXIKIyBBZGQgTlZJRElBIHJlcG8gYW5kIGluc3RhbGwgZHJpdmVycwpzdWRvIGRuZiBjb25maWctbWFuYWdlciAtLWFkZC1yZXBvIGh0dHBzOi8vZGV2ZWxvcGVyLmRvd25sb2FkLm52aWRpYS5jb20vY29tcHV0ZS9jdWRhL3JlcG9zL2FtenIyMDIzL3g4Nl82NC9jdWRhLWFtenIyMDIzLnJlcG8Kc3VkbyBkbmYgaW5zdGFsbCAteSBudmlkaWEtZHJpdmVyLWxhdGVzdC1keG4ga2VybmVsLWRldmVsLXVuYW1lIC1yCiMgSW5zdGFsbCBDVURBIFRvb2xraXQgMTIuOApzdWRvIGRuZiBpbnN0YWxsIC15IGN1ZGEtdG9vbGtpdC0xMi04CiMgSW5zdGFsbCBDb250YWluZXIgVG9vbGtpdApzdWRvIGRuZiBjb25maWctbWFuYWdlciAtLWFkZC1yZXBvIGh0dHBzOi8vbnZpZGlhLmdpdGh1Yi5pby9saWJudmlkaWEtY29udGFpbmVyL3N0YWJsZS9ycG0vbnZpZGlhLWNvbnRhaW5lci10b29sa2l0LnJlcG8Kc3VkbyBkbmYgaW5zdGFsbCAteSBudmlkaWEtY29udGFpbmVyLXRvb2xraXQKc3VkbyBudmlkaWEtY3RrIHJ1bnRpbWUgY29uZmlndXJlIC0tcnVudGltZT1kb2NrZXIKc3VkbyBzeXN0ZW1jdGwgcmVzdGFydCBkb2NrZXIK"
+    "UserData": "IyEvYmluL2Jhc2gKIyBVcGRhdGUgc3lzdGVtIHBhY2thZ2VzCnNldCAtZXVvIHBpcGVmYWlsCmFwdCB1cGRhdGUKYXB0IGluc3RhbGwgLXkgY3VybCBidWlsZC1lc3NlbnRpYWwgZGttcwoKIyBJbnN0YWxsIE5WSURJQSBkcml2ZXJzCmFwdCBpbnN0YWxsIC15IG52aWRpYS1kcml2ZXItNTcwCgojIEluc3RhbGwgQ1VEQSBUb29sa2l0IDEyLjcKd2dldCBodHRwczovL2RldmVsb3Blci5kb3dubG9hZC5udmlkaWEuY29tL2NvbXB1dGUvY3VkYS9yZXBvcy91YnVudHUyMDA0L3g4Nl82NC9jdWRhLWtleXJpbmdfMS4xLTFfYWxsLmRlYgpkcGtnIC1pIGN1ZGEta2V5cmluZ18xLjEtMV9hbGwuZGViCmFwdC1nZXQgdXBkYXRlCmFwdC1nZXQgaW5zdGFsbCAteSBjdWRhLXRvb2xraXQtMTItNwoKIyBJbnN0YWxsIERvY2tlcgphcHQgaW5zdGFsbCAteSBkb2NrZXIuaW8Kc3lzdGVtY3RsIGVuYWJsZSAtLW5vdyBkb2NrZXIKdXNlcm1vZCAtYUcgZG9ja2VyIHVidW50dQoKIyBJbnN0YWxsIE5WSURJQSBDb250YWluZXIgVG9vbGtpdApkaXN0cmlidXRpb249JCguIC9ldGMvb3MtcmVsZWFzZTtlY2hvICRJRCRWRVJTSU9OX0lEKQpjdXJsIC1zIC1MIGh0dHBzOi8vbnZpZGlhLmdpdGh1Yi5pby9udmlkaWEtZG9ja2VyL2dwZ2tleSB8IGFwdC1rZXkgYWRkIC0KY3VybCAtcyAtTCBodHRwczovL252aWRpYS5naXRodWIuaW8vbnZpZGlhLWRvY2tlci8kZGlzdHJpYnV0aW9uL252aWRpYS1kb2NrZXIubGlzdCB8IHRlZSAvZXRjL2FwdC9zb3VyY2VzLmxpc3QuZC9udmlkaWEtZG9ja2VyLmxpc3QKYXB0LWdldCB1cGRhdGUKYXB0LWdldCBpbnN0YWxsIC15IG52aWRpYS1jb250YWluZXItdG9vbGtpdApudmlkaWEtY3RrIHJ1bnRpbWUgY29uZmlndXJlIC0tcnVudGltZT1kb2NrZXIKc3lzdGVtY3RsIHJlc3RhcnQgZG9ja2VyCgojIFNldCBlbnZpcm9ubWVudCB2YXJpYWJsZXMKY2F0ID4+IC9ob21lL3VidW50dS8uYmFzaHJjIDw8RU9GCgojIENVREEgc2V0dXAKZXhwb3J0IFBBVEg9IiRQQVRIOi91c3IvbG9jYWwvY3VkYS1ub3ZhL2JpbiIKZXhwb3J0IExEX0xJQlJBUllfUEFUSD0iJExEX0xJQlJBUllfUEFUSDovdXNyL2xvY2FsL2N1ZGEtbm92YS9saWI2NCIKRU9GCgojIEVuc3VyZSB1YnVudHUgdXNlciBvd25zIHRoZSBmaWxlcwpjaG93biAtUiB1YnVudHU6dWJ1bnR1IC9ob21lL3VidW50dS8uYmFzaHJjCgojIENyZWF0ZSBhIHRlc3QgZmlsZSB0byBpbmRpY2F0ZSBjb21wbGV0aW9uCmNhdCA+IC9ob21lL3VidW50dS9pbnN0YWxsYXRpb25fY29tcGxldGUudHh0IDw8RU9GCkluc3RhbGxhdGlvbiBjb21wbGV0ZWQgYXQgJChkYXRlKQpSZWJvb3QgdGhlIHN5c3RlbSB0byBlbnN1cmUgYWxsIGRyaXZlcnMgYXJlIGxvYWRlZCBwcm9wZXJseS4KRU9GCmNob3duIHVidW50dTp1YnVudHUgL2hvbWUvdWJ1bnR1L2luc3RhbGxhdGlvbl9jb21wbGV0ZS50eHQKCiMgUmVib290IHRvIGFwcGx5IGFsbCBjaGFuZ2VzCnJlYm9vdA=="
   }' \
   --query 'SpotInstanceRequests[0].SpotInstanceRequestId' \
   --output text)
@@ -70,9 +70,9 @@ echo "   Availability Zone:   $AZ"
 echo "   Current spot price:  \$$CURRENT_SPOT_PRICE per hour"
 echo
 echo "🔑 Connect with:"
-echo "   ssh -i \"$KEY_PATH\" ec2-user@$PUBLIC_IP"
+echo "   ssh -i \"$KEY_PATH\" ubuntu@$PUBLIC_IP"
 echo
-echo "⚠️ Wait about 5 minutes for the setup script to complete installation of NVIDIA drivers and CUDA 12.8"
+echo "⚠️ Wait about 5-10 minutes for the setup script to complete installation of NVIDIA drivers and CUDA 12.7"
 echo
 echo "After connecting, verify the installation with:"
 echo "   nvidia-smi"
