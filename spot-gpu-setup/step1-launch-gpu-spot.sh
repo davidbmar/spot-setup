@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # — Configuration —
-# Ubuntu 22.04 LTS AMI with NVIDIA drivers pre-installed
-AMI_ID="ami-0c8cb6d6f6dc127c9"  # Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 22.04) in us-east-2
+#AMI_ID="ami-0c8cb6d6f6dc127c9"  # Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 22.04) in us-east-2
+#AMI ID: ami-00e230f522a6b65dd # Name: Deep Learning AMI GPU PyTorch 2.0.0 (Amazon Linux 2) 20230524
+AMI_ID="ami-0204a512d537abdc0" #us-east-2 Ubuntu, Name: Deep Learning AMI GPU PyTorch 1.13.1 (Ubuntu 20.04) 20230519
 INSTANCE_TYPE="g4dn.xlarge"
 SECURITY_GROUP_ID="sg-04f1a5465fe1b8f6e"
 SUBNET_ID="subnet-07efda88a184dd62d"
